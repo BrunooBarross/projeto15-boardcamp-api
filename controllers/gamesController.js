@@ -18,9 +18,9 @@ export async function getGames(req, res) {
     try {
         if (name) {
             const consulta = await connection.query(
-                `SELECT * FROM games WHERE name LIKE '${name[0].toUpperCase() + name.substr(1)}%'`);
+                `SELECT * FROM games WHERE name LIKE '${name[0].toUpperCase() + name.substr(1)}%'
+                    OR name LIKE '${name}%' `);
             const games = consulta.rows;
-            console.log(consulta.rows);
             return res.status(200).send(games);
         }
         const consulta = await connection.query(`SELECT * FROM games`)
