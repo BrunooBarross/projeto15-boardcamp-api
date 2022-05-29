@@ -36,3 +36,21 @@ export async function getCustomers(req, res) {
         return res.status(500).send("Erro ao realizar a consulta de listagem de todos os usuários", error);
     }
 }
+
+export async function putCustomers(req, res) {
+    const id = req.params.id;
+    const { name, phone, cpf, birthday } = req.body;
+    try {
+        const postBanco = await connection.query(`
+        UPDATE customers SET 
+            name = $1,
+            phone = $2,
+            cpf = $3,
+            birthday = $4
+        WHERE id = $5
+        `, [name, phone, cpf, birthday, id])
+        res.sendStatus(201);
+    } catch (error) {
+        return res.status(500).send("Erro no post clientes ao concectar com o banco", error);
+    }
+}
