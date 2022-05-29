@@ -1,3 +1,4 @@
+import joi from "joi";
 import JoiBase from "joi"
 import JoiDate from "@joi/date"
 import connection from '../db.js'
@@ -33,4 +34,20 @@ export async function validarCustomers(req, res, next) {
     } catch (error) {
         return res.status(500).send("Erro ao conectar no servidor middleware validarDadosCliente", error);
     }
+}
+
+export async function validarParamId(req, res, next) {
+    const id = parseInt(req.params.id);
+ 
+    const paramsSchema = joi.object({
+        id: joi.number().min(1).required(),
+    });
+
+    const { error } = paramsSchema.validate({ id: id });
+
+    if (error) {
+        return res.status(422).send(error.details);
+    }
+
+    next();
 }
