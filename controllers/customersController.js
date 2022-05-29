@@ -27,3 +27,12 @@ export async function getCustomerId(req, res) {
         return res.status(500).send("Erro de consulta ao banco na função getCustomerId ", error);
     }
 }
+
+export async function getCustomers(req, res) {
+    try {
+        const consulta = await connection.query(`SELECT * FROM customers`);
+        return res.send(consulta.rows);
+    } catch (error) {
+        return res.status(500).send("Erro ao realizar a consulta de listagem de todos os usuários", error);
+    }
+}
