@@ -4,7 +4,7 @@ import connection from '../db.js'
 export async function validarDadosGame(req, res, next) {
     const novoGame = req.body;
 
-    const usuarioSchema = joi.object({
+    const gameSchema = joi.object({
         name: joi.string().required(),
         image: joi.string().regex(/(https:\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?/).required(),
         stockTotal: joi.number().integer().min(1).required(),
@@ -12,7 +12,7 @@ export async function validarDadosGame(req, res, next) {
         pricePerDay: joi.number().integer().min(1).required()
     });
 
-    const { error } = usuarioSchema.validate(novoGame);
+    const { error } = gameSchema.validate(novoGame);
 
     if (error) {
         return res.status(422).send(error.details);
