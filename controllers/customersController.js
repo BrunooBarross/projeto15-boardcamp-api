@@ -1,6 +1,6 @@
 import connection from '../db.js'
 
-export async function postCliente(req, res) {
+export async function postCustomers(req, res) {
     const { name, phone, cpf, birthday } = req.body;
     try {
         const postBanco = await connection.query(`
