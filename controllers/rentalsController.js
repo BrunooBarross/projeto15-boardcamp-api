@@ -74,9 +74,38 @@ export async function getRentals(req, res) {
 export async function deleteRentals(req, res) {
     const id = req.params.id;
     try {
-        connection.query(` DELETE FROM rentals WHERE id = $1`, [id]);
+        connection.query(`DELETE FROM rentals WHERE id = $1`, [id]);
         res.sendStatus(200);
     } catch (error) {
         return res.status(500).send("Erro ao deletar aluguel do banco", error);
+    }
+}
+
+export async function finalizarRentals(req, res) {
+    const id = req.params.id;
+    const date = dayjs().locale('en-us').format('YYYY-MM-DD')
+    try {
+        const consulta = await connection.query(`
+            SELECT rentals.*, games."pricePerDay" FROM rentals
+            JOIN games ON rentals."gameId" = games.id WHERE rentals.id = $1`
+            , [id]);
+        const diff = dayjs(date).diff(consulta.rows[0].rentDate, "d");
+        if(diff > consulta.rows[0].daysRented){
+            const delayFee = (diff - consulta.rows[0].daysRented) * consulta.rows[0].pricePerDay;
+            const update = await connection.query(` 
+                UPDATE rentals SET 
+                    "returnDate" = $1,
+                    "delayFee" = $2
+                WHERE id = $3`, [date, delayFee, id]);
+            return res.sendStatus(200);
+        }
+        const update = await connection.query(` 
+            UPDATE rentals SET 
+                "returnDate" = $1,
+                "delayFee" = $2
+            WHERE id = $3`, [date, 0, id]);
+        res.sendStatus(200);
+    } catch (error) {
+        return res.status(500).send("Erro ao finalizar o rental", error);
     }
 }

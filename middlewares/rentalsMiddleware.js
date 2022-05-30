@@ -30,7 +30,7 @@ export async function validarRentals(req, res, next) {
 export async function validarParametroId(req, res, next) {
     const id = req.params.id;
     try {
-        const temAluguel = await connection.query(`SELECT * FROM customers WHERE id = $1`, [id]);
+        const temAluguel = await connection.query(`SELECT * FROM rentals WHERE id = $1`, [id]);
         if (temAluguel.rows.length === 0) {
             return res.sendStatus(404);
         }
