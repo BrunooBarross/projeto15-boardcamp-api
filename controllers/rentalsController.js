@@ -70,3 +70,13 @@ export async function getRentals(req, res) {
         return res.status(500).send("Erro no controller get Rentals", error);
     }
 }
+
+export async function deleteRentals(req, res) {
+    const id = req.params.id;
+    try {
+        connection.query(` DELETE FROM rentals WHERE id = $1`, [id]);
+        res.sendStatus(200);
+    } catch (error) {
+        return res.status(500).send("Erro ao deletar aluguel do banco", error);
+    }
+}

@@ -26,3 +26,19 @@ export async function validarRentals(req, res, next) {
         return res.status(500).send("Erro ao conectar no servidor middleware  postRentals", error);
     }
 }
+
+export async function validarParametroId(req, res, next) {
+    const id = req.params.id;
+    try {
+        const temAluguel = await connection.query(`SELECT * FROM customers WHERE id = $1`, [id]);
+        if (temAluguel.rows.length === 0) {
+            return res.sendStatus(404);
+        }
+        if(temAluguel.rows[0].returnDate !== null){
+            return res.sendStatus(400);
+        }
+        next();
+    } catch (error) {
+        return res.status(500).send("Erro na validação com o servidor validarParametroId", error);
+    }
+}
