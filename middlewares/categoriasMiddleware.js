@@ -7,7 +7,7 @@ export async function validarCategoria(req, res, next) {
     }
     try {
         const temName = await connection.query(`SELECT * FROM categories WHERE name = $1`,[name]);
-        if(temName){
+        if(temName.rows.length > 0){
             return res.sendStatus(409);
         }
         next();
