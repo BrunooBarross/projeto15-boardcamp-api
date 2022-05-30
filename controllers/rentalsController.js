@@ -47,8 +47,8 @@ export async function getRentals(req, res) {
             rental = {
                 ...rental,
                 customer: {
-                    id: rental.customerId,
-                    name: rental.customerName,
+                    id: rental.customersId,
+                    name: rental.customersName,
                 },
                 game: {
                     id: rental.gamesId,
