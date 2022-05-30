@@ -20,14 +20,27 @@ export async function postRentals(req, res) {
 }
 
 export async function getRentals(req, res) {
+    const gameId = req.query.gameId;
+    const customerId = req.query.customerId;
     try {
-        const consulta = await connection.query(`
-        SELECT rentals.*, customers.id as "customersId", customers.name as "customersName", games.id as "gamesId", 
-        games.name as "gamesName", categories.id as "categoryId", categories.name as "categoryName" FROM rentals
-        JOIN games ON rentals."gameId" = games.id
-        JOIN customers ON rentals."customerId" = customers.id
-        JOIN categories ON games."categoryId" = categories.id
-        `);
+        if( customerId || gameId ){
+            var consulta = await connection.query(`
+                SELECT rentals.*, customers.id as "customersId", customers.name as "customersName", games.id as "gamesId", 
+                games.name as "gamesName", categories.id as "categoryId", categories.name as "categoryName" FROM rentals
+                JOIN games ON rentals."gameId" = games.id
+                JOIN customers ON rentals."customerId" = customers.id
+                JOIN categories ON games."categoryId" = categories.id
+                WHERE rentals."customerId" = $1 OR rentals."gameId" = $2;
+            `, [customerId, gameId]);
+        }else{
+            var consulta = await connection.query(`
+                SELECT rentals.*, customers.id as "customersId", customers.name as "customersName", games.id as "gamesId", 
+                games.name as "gamesName", categories.id as "categoryId", categories.name as "categoryName" FROM rentals
+                JOIN games ON rentals."gameId" = games.id
+                JOIN customers ON rentals."customerId" = customers.id
+                JOIN categories ON games."categoryId" = categories.id
+            `);
+        }
         let rentals = consulta.rows;
         let rentalsFiltered = [];
         for (let rental of rentals) {
