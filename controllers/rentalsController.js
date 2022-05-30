@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import connection from '../db.js'
 
-export async function postRentals(req, res, next) {
+export async function postRentals(req, res) {
     const { customerId, gameId, daysRented } = req.body;
     const date = dayjs().locale('en-us').format('YYYY-MM-DD')
 
@@ -16,5 +16,44 @@ export async function postRentals(req, res, next) {
         res.sendStatus(201);
     } catch (error) {
         return res.status(500).send("Erro no controller postRentals não foi possível adicionar o aluguel", error);
+    }
+}
+
+export async function getRentals(req, res) {
+    try {
+        const consulta = await connection.query(`
+        SELECT rentals.*, customers.id as "customersId", customers.name as "customersName", games.id as "gamesId", 
+        games.name as "gamesName", categories.id as "categoryId", categories.name as "categoryName" FROM rentals
+        JOIN games ON rentals."gameId" = games.id
+        JOIN customers ON rentals."customerId" = customers.id
+        JOIN categories ON games."categoryId" = categories.id
+        `);
+        let rentals = consulta.rows;
+        let rentalsFiltered = [];
+        for (let rental of rentals) {
+            rental = {
+                ...rental,
+                customer: {
+                    id: rental.customerId,
+                    name: rental.customerName,
+                },
+                game: {
+                    id: rental.gamesId,
+                    name: rental.gamesName,
+                    categoryId: rental.categoryId,
+                    categoryName: rental.categoryName
+                },
+            }
+            delete rental.customersId;
+            delete rental.customersName;
+            delete rental.gamesId;
+            delete rental.gamesName;
+            delete rental.categoryId;
+            delete rental.categoryName;
+            rentalsFiltered.push(rental);
+        }
+        res.status(200).send(rentalsFiltered);
+    } catch (error) {
+        return res.status(500).send("Erro no controller get Rentals", error);
     }
 }
