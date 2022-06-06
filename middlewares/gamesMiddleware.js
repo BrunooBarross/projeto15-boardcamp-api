@@ -15,7 +15,7 @@ export async function validarDadosGame(req, res, next) {
     const { error } = gameSchema.validate(novoGame);
 
     if (error) {
-        return res.status(422).send(error.details);
+        return res.status(400).send(error.details);
     }
 
     try {
@@ -29,6 +29,6 @@ export async function validarDadosGame(req, res, next) {
         }
         next();
     } catch (error) {
-        return res.status(500).send("Erro ao conectar no servidor middleware validarDadosGame", error);
+        return res.sendStatus(500);
     }
 }

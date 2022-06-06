@@ -32,7 +32,7 @@ export async function validarCustomers(req, res, next) {
 
         next();
     } catch (error) {
-        return res.status(500).send("Erro ao conectar no servidor middleware validarDadosCliente", error);
+        return res.sendStatus(500);
     }
 }
 
@@ -77,6 +77,6 @@ export async function validarPutCustomer(req, res, next) {
         }
 
     } catch (error) {
-        return res.status(500).send("Erro middleware validarPutcustomer", error);
+        return res.sendStatus(500);
     }
 }

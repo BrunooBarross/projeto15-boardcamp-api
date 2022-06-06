@@ -15,7 +15,7 @@ export async function postRentals(req, res) {
 
         res.sendStatus(201);
     } catch (error) {
-        return res.status(500).send("Erro no controller postRentals não foi possível adicionar o aluguel", error);
+        return res.sendStatus(500);
     }
 }
 
@@ -67,7 +67,7 @@ export async function getRentals(req, res) {
         }
         res.status(200).send(rentalsFiltered);
     } catch (error) {
-        return res.status(500).send("Erro no controller get Rentals", error);
+        return res.sendStatus(500);
     }
 }
 
@@ -77,7 +77,7 @@ export async function deleteRentals(req, res) {
         connection.query(`DELETE FROM rentals WHERE id = $1`, [id]);
         res.sendStatus(200);
     } catch (error) {
-        return res.status(500).send("Erro ao deletar aluguel do banco", error);
+        return res.sendStatus(500);
     }
 }
 
@@ -105,7 +105,8 @@ export async function finalizarRentals(req, res) {
                 "delayFee" = $2
             WHERE id = $3`, [date, 0, id]);
         res.sendStatus(200);
+        
     } catch (error) {
-        return res.status(500).send("Erro ao finalizar o rental", error);
+        return res.sendStatus(500);
     }
 }

@@ -8,7 +8,7 @@ export async function postCustomers(req, res) {
         values ($1, $2, $3, $4)`, [name, phone, cpf, birthday]);
         res.sendStatus(201);
     } catch (error) {
-        return res.status(500).send("Erro no post clientes ao concectar com o banco", error);
+        return res.sendStatus(500);
     }
 }
 
@@ -24,7 +24,7 @@ export async function getCustomerId(req, res) {
         }
         return res.send(cliente);
     } catch (error) {
-        return res.status(500).send("Erro de consulta ao banco na função getCustomerId ", error);
+        return res.sendStatus(500);
     }
 }
 
@@ -33,7 +33,7 @@ export async function getCustomers(req, res) {
         const consulta = await connection.query(`SELECT * FROM customers`);
         return res.send(consulta.rows);
     } catch (error) {
-        return res.status(500).send("Erro ao realizar a consulta de listagem de todos os usuários", error);
+        return res.sendStatus(500);
     }
 }
 
@@ -51,6 +51,6 @@ export async function putCustomers(req, res) {
         `, [name, phone, cpf, birthday, id])
         res.sendStatus(201);
     } catch (error) {
-        return res.status(500).send("Erro no post clientes ao concectar com o banco", error);
+        return res.sendStatus(500);
     }
 }

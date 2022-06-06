@@ -12,6 +12,6 @@ export async function validarCategoria(req, res, next) {
         }
         next();
     } catch (error) {
-        return res.status(500).send("Erro ao conectar no servidor middleware validarCategoria", error);
+        return res.sendStatus(500);
     }
 }

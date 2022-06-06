@@ -23,7 +23,7 @@ export async function validarRentals(req, res, next) {
         }
         next();
     } catch (error) {
-        return res.status(500).send("Erro ao conectar no servidor middleware  postRentals", error);
+        return res.sendStatus(500);
     }
 }
 
@@ -39,6 +39,6 @@ export async function validarParametroId(req, res, next) {
         }
         next();
     } catch (error) {
-        return res.status(500).send("Erro na validação com o servidor validarParametroId", error);
+        return res.sendStatus(500);
     }
 }

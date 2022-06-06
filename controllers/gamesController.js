@@ -8,7 +8,7 @@ export async function postGames(req, res) {
         values ($1, $2, $3, $4, $5)`,[name, image, stockTotal, categoryId, pricePerDay]);
         res.sendStatus(201);
     } catch (error) {
-        return res.status(500).send("Erro no post games ao concectar com o banco", error);
+        return res.sendStatus(500);
     }
 }
 
@@ -37,6 +37,6 @@ export async function getGames(req, res) {
         const games = consulta.rows;
         res.status(200).send(games);
     } catch (error) {
-        return res.status(500).send("Erro no get games com o Banco de dados", error);
+        return res.sendStatus(500);
     }
 }
